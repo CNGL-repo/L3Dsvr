@@ -13,22 +13,22 @@
   <!-- Services from L3DsvrServicesService WSDL service -->
 
   <service name="L3DsvrServices" provider="java:RPC" style="wrapped" use="literal">
-      <parameter name="wsdlTargetNamespace" value="http://webservices.com.L3Dsvr"/>
+      <parameter name="wsdlTargetNamespace" value="http://webservices.com.l3dsvr"/>
       <parameter name="wsdlServiceElement" value="L3DsvrServicesService"/>
-      <parameter name="schemaQualified" value="http://webservices.com.L3Dsvr"/>
+      <parameter name="schemaQualified" value="http://webservices.com.l3dsvr"/>
       <parameter name="wsdlServicePort" value="L3DsvrServices"/>
-      <parameter name="className" value="L3Dsvr.com.webservices.L3DsvrServicesSoapBindingImpl"/>
+      <parameter name="className" value="l3dsvr.com.webservices.L3DsvrServicesSoapBindingImpl"/>
       <parameter name="wsdlPortType" value="L3DsvrServices"/>
       <parameter name="typeMappingVersion" value="1.2"/>
-      <operation name="generateOptimalPathService" qname="operNS:generateOptimalPathService" xmlns:operNS="http://webservices.com.L3Dsvr" returnQName="retNS:generateOptimalPathServiceReturn" xmlns:retNS="http://webservices.com.L3Dsvr" returnType="rtns:anyType" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
-        <parameter qname="pns:incomingData" xmlns:pns="http://webservices.com.L3Dsvr" type="tns:anyType" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
+      <operation name="generateOptimalPathService" qname="operNS:generateOptimalPathService" xmlns:operNS="http://webservices.com.l3dsvr" returnQName="retNS:generateOptimalPathServiceReturn" xmlns:retNS="http://webservices.com.L3Dsvr" returnType="rtns:anyType" xmlns:rtns="http://www.w3.org/2001/XMLSchema" soapAction="" >
+        <parameter qname="pns:incomingData" xmlns:pns="http://webservices.com.l3dsvr" type="tns:anyType" xmlns:tns="http://www.w3.org/2001/XMLSchema"/>
       </operation>
       <parameter name="allowedMethods" value="generateOptimalPathService"/>
 
       <typeMapping
-        xmlns:ns="http://webservices.com.L3Dsvr"
+        xmlns:ns="http://webservices.com.l3dsvr"
         qname="ns:>generateOptimalPathServiceResponse"
-        type="java:L3Dsvr.com.webservices.GenerateOptimalPathServiceResponse"
+        type="java:l3dsvr.com.webservices.GenerateOptimalPathServiceResponse"
         serializer="org.apache.axis.encoding.ser.BeanSerializerFactory"
         deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory"
         encodingStyle=""

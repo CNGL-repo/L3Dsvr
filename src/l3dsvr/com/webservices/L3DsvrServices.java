@@ -34,10 +34,10 @@ import static org.joox.JOOX.$;
 public class L3DsvrServices {
 	
 /* Comment or discomment the lines below depending on the environment, and update the username ("calvodea") */
-//	String basePath = "/var/www/webservices/L3Dsvr/"; // [PRODUCTION] Path to server 
-//	String resultsBaseURL = "http://l3dsvr.peep.ie/files/"; // [PRODUCTION] URL to CSV files
-	String basePath = "/home/calvodea/workspace/L3Dsvr/"; // [DEVELOPMENT] Path to server 
-	String resultsBaseURL = basePath + "files/"; // [DEVELOPMENT] URL to CSV files
+	String basePath = "/var/www/webservices/L3Dsvr/"; // [PRODUCTION] Path to server 
+	String resultsBaseURL = "http://l3dsvr.peep.ie/files/"; // [PRODUCTION] URL to CSV files
+//	String basePath = "/home/calvodea/workspace/L3Dsvr/"; // [DEVELOPMENT] Path to server 
+//	String resultsBaseURL = basePath + "files/"; // [DEVELOPMENT] URL to CSV files
 	
 	@POST
 	@Path("/addCSVFile")
@@ -142,10 +142,11 @@ public class L3DsvrServices {
 	private String copyFileToLocalhost(String remoteFileURL, String customerId, String projectId,
 			String sourceLanguage, String targetLanguage, String processingId) throws IOException {
 		
-		String localFilePath = resultsBaseURL + customerId + "/" + projectId + "/" +
+		String localFilePath = basePath + "files/" + customerId + "/" + projectId + "/" +
 				sourceLanguage + "/" + targetLanguage;
 		
-		String localFileURL = localFilePath + "/" + processingId + ".csv";
+		String localFileURL = resultsBaseURL + customerId + "/" + projectId + "/" +
+				sourceLanguage + "/" + targetLanguage + "/" + processingId + ".csv";
 		
 		URL inputURL = new URL(remoteFileURL);
 		InputStream inputCSVFile = inputURL.openStream();
@@ -155,8 +156,12 @@ public class L3DsvrServices {
 	    if(localFileDirectory.exists() == false) {
 	    	localFileDirectory.mkdirs();
 	    }
-		
-		FileOutputStream localCSVFile = new FileOutputStream(localFileURL);
+	    
+	    localFileDirectory.setWritable(true); // Give permissions to write in this folder
+	    localFileDirectory.setReadable(true); // Give permissions to read in this folder
+	    localFileDirectory.setExecutable(true); // Give permissions to execute in this folder
+	    		
+		FileOutputStream localCSVFile = new FileOutputStream(localFilePath + "/" + processingId + ".csv");
 		final int BUF_SIZE = 1 << 8;
 		byte[] buffer = new byte[BUF_SIZE];
 		int bytesRead = -1;

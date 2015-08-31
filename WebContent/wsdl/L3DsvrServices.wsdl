@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions targetNamespace="http://webservices.com.L3Dsvr" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://webservices.com.L3Dsvr" xmlns:intf="http://webservices.com.L3Dsvr" xmlns:tns1="http://io.java" xmlns:tns2="http://core.rs.ws.javax" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<wsdl:definitions targetNamespace="http://webservices.com.l3dsvr" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://webservices.com.l3dsvr" xmlns:intf="http://webservices.com.l3dsvr" xmlns:tns1="http://io.java" xmlns:tns2="http://core.rs.ws.javax" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 <!--WSDL created by Apache Axis version: 1.4
 Built on Apr 22, 2006 (06:55:48 PDT)-->
  <wsdl:types>
-  <schema elementFormDefault="qualified" targetNamespace="http://webservices.com.L3Dsvr" xmlns="http://www.w3.org/2001/XMLSchema">
+  <schema elementFormDefault="qualified" targetNamespace="http://webservices.com.l3dsvr" xmlns="http://www.w3.org/2001/XMLSchema">
    <import namespace="http://core.rs.ws.javax"/>
    <import namespace="http://io.java"/>
    <element name="generateOptimalPathService">

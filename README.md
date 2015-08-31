@@ -24,7 +24,7 @@ Response: outputURL
 
 ## How to run in production
 1. From a terminal session, type the following example
-   curl -X POST --data "sourceURL=https://docs.shopify.com/manual/your-store/products/product_template.csv&custId=1234&projId=5678&sourceLang=es&targetLang=en" http://l3dsvr.peepp.ie/api/addCSVFile
+   curl -X POST --data "sourceURL=https://docs.shopify.com/manual/your-store/products/product_template.csv&custId=1234&projId=5678&sourceLang=es&targetLang=en" http://l3dsvr.peep.ie/api/addCSVFile
 2. It will return something like {"outputURL": "http://l3dsvr.peep.ie/files/1234/5678/es/en/4.csv"}
 3. If you open http://l3dsvr.peep.ie/files/1234/5678/es/en/4.csv you will see the optimal path file
 
