@@ -1,35 +1,23 @@
 package l3dsvr.com.webservices;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.net.URLConnection;
-
 import javax.ws.rs.FormParam;
-import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.io.FilenameUtils;
-import org.joox.Match;
 import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
-
-import static org.joox.JOOX.$;
 
 @Path("/")
 public class L3DsvrServices {
@@ -65,10 +53,7 @@ public class L3DsvrServices {
 			return Response.ok(wrongFormatFileResponse, MediaType.APPLICATION_JSON).build();
 		}
 		
-		// Generate a new processingId for the optimal path generation
-		String processingId = getNextProcessingId();
-		
-		String localFilePath = copyFileToLocalhost(sourceFileURL, customerId, projectId, sourceLanguage, targetLanguage, processingId);
+		String localFilePath = copyFileToLocalhost(sourceFileURL, customerId, projectId, sourceLanguage, targetLanguage);
 				
 		String jsonResponse = "{\"outputURL\": \"" + localFilePath + "\"}";
 		
@@ -106,42 +91,10 @@ public class L3DsvrServices {
 	}
 	
 	
-	// Read from sequence.txt the number, increment it + 1, overwrite the file and return it
-	private String getNextProcessingId() {
-		
-		// Read original number
-		File file = new File(basePath + "sequence.txt");
-		BufferedReader reader = null;
-		String currentProcessingId = null;
-		
-		try {
-		    reader = new BufferedReader(new FileReader(file));
-		    currentProcessingId = reader.readLine(); // Read number from file
-		} catch (FileNotFoundException e) {
-		    e.printStackTrace();
-		} catch (IOException e) {
-		    e.printStackTrace();
-		} finally {
-		    try {
-		        if (reader != null) {
-		        	int nextProcessingId = Integer.parseInt(currentProcessingId) + 1;
-		            reader.close(); // Close read file
-		        	BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-		        	writer.write(Integer.toString(nextProcessingId));
-		        	writer.close(); // Close write file
-		        }
-		    } catch (IOException e) {
-		    }
-		}
-		
-		return currentProcessingId;
-	}
-	
-	
 	/* Make an exact copy of [remoteFile] in files/customerId/projectId/sourceLanguage/targetLanguage/[remoteFile]
 	 * in the L3Dsvr server, returning the path */
 	private String copyFileToLocalhost(String remoteFileURL, String customerId, String projectId,
-			String sourceLanguage, String targetLanguage, String processingId) throws IOException {
+			String sourceLanguage, String targetLanguage) throws IOException {
 
 		URL inputURL = new URL(remoteFileURL);
 		String fileName = FilenameUtils.getName(remoteFileURL);
