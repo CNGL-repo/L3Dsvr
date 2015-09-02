@@ -23,7 +23,7 @@ import org.xml.sax.SAXException;
 public class L3DsvrServices {
 	
 /* Comment or discomment the lines below depending on the environment, and update the username ("calvodea") */
-	String basePath = "/var/www/webservices/L3Dsvr/"; // [PRODUCTION] Path to server 
+	String basePath = "/var/www/webservices/l3dsvr/"; // [PRODUCTION] Path to server 
 	String resultsBaseURL = "http://l3dsvr.peep.ie/files/"; // [PRODUCTION] URL to files
 //	String basePath = "/home/calvodea/workspace/L3Dsvr/"; // [DEVELOPMENT] Path to server 
 //	String resultsBaseURL = basePath + "files/"; // [DEVELOPMENT] URL to files
