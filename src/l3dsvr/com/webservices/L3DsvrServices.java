@@ -24,6 +24,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.io.FilenameUtils;
 import org.joox.Match;
 import org.w3c.dom.DOMException;
 import org.xml.sax.SAXException;
@@ -35,16 +36,16 @@ public class L3DsvrServices {
 	
 /* Comment or discomment the lines below depending on the environment, and update the username ("calvodea") */
 	String basePath = "/var/www/webservices/L3Dsvr/"; // [PRODUCTION] Path to server 
-	String resultsBaseURL = "http://l3dsvr.peep.ie/files/"; // [PRODUCTION] URL to CSV files
+	String resultsBaseURL = "http://l3dsvr.peep.ie/files/"; // [PRODUCTION] URL to files
 //	String basePath = "/home/calvodea/workspace/L3Dsvr/"; // [DEVELOPMENT] Path to server 
-//	String resultsBaseURL = basePath + "files/"; // [DEVELOPMENT] URL to CSV files
+//	String resultsBaseURL = basePath + "files/"; // [DEVELOPMENT] URL to files
 	
 	@POST
-	@Path("/addCSVFile")
+	@Path("/addFile")
 	@Produces(MediaType.APPLICATION_JSON)
-	/* Receives the URL of a CSV file, the customerId, projectId, source language and target language
+	/* Receives the URL of a file, the customerId, projectId, source language and target language
 	 * and copies it into the folder files/customerId/projectId/sourceLanguage/targetLanguage/ in the L3Dsvr server */
-	public Response addCSVFileService(
+	public Response addFileService(
 			@FormParam("sourceURL") String sourceFileURL, // e.g. "https://docs.shopify.com/manual/your-store/products/product_template.csv"
 			@FormParam("custId") String customerId, // e.g. "1234"
 			@FormParam("projId") String projectId, // e.g. "5678"
@@ -60,7 +61,7 @@ public class L3DsvrServices {
 		
 		// If URL is not in the correct format, return error
 		if (isFileInCorrectFormat(sourceFileURL) == false) {
-			String wrongFormatFileResponse = "{\"error\": \"Wrong format in input file. Expecting .csv extension.\"}";			
+			String wrongFormatFileResponse = "{\"error\": \"Wrong format in input file. Expecting .csv or .csvm extension.\"}";			
 			return Response.ok(wrongFormatFileResponse, MediaType.APPLICATION_JSON).build();
 		}
 		
@@ -91,14 +92,14 @@ public class L3DsvrServices {
 	}
 	
 	
-	/* Checks that if the file is in the correct CSV format */
+	/* Checks that if the file is in the correct CSV or CSVM format */
 	private boolean isFileInCorrectFormat(String sourceFileURL)
 			throws MalformedURLException, IOException, ProtocolException {
 
 		// Get the file extension
-		String fileExtension = sourceFileURL.substring(sourceFileURL.length() - 3, sourceFileURL.length());
+		String fileExtension = FilenameUtils.getExtension(sourceFileURL);
 		
-		if (fileExtension.equalsIgnoreCase("csv")) // OK, correct format
+		if (fileExtension.equalsIgnoreCase("csv") || fileExtension.equalsIgnoreCase("csvm")) // OK, correct format
 			return true;
 		else // Wrong format
 			return false;
@@ -137,19 +138,21 @@ public class L3DsvrServices {
 	}
 	
 	
-	/* Make an exact copy of the remote CSV file in files/customerId/projectId/sourceLanguage/targetLanguage/processingId.csv
+	/* Make an exact copy of [remoteFile] in files/customerId/projectId/sourceLanguage/targetLanguage/[remoteFile]
 	 * in the L3Dsvr server, returning the path */
 	private String copyFileToLocalhost(String remoteFileURL, String customerId, String projectId,
 			String sourceLanguage, String targetLanguage, String processingId) throws IOException {
-		
+
+		URL inputURL = new URL(remoteFileURL);
+		String fileName = FilenameUtils.getName(remoteFileURL);
+
 		String localFilePath = basePath + "files/" + customerId + "/" + projectId + "/" +
 				sourceLanguage + "/" + targetLanguage;
 		
 		String localFileURL = resultsBaseURL + customerId + "/" + projectId + "/" +
-				sourceLanguage + "/" + targetLanguage + "/" + processingId + ".csv";
+				sourceLanguage + "/" + targetLanguage + "/" + fileName;
 		
-		URL inputURL = new URL(remoteFileURL);
-		InputStream inputCSVFile = inputURL.openStream();
+		InputStream inputFile = inputURL.openStream();
 		
 	    File localFileDirectory = new File(localFilePath);
 	    // Check if folders do not exist, and create them if so
@@ -161,16 +164,16 @@ public class L3DsvrServices {
 	    localFileDirectory.setReadable(true); // Give permissions to read in this folder
 	    localFileDirectory.setExecutable(true); // Give permissions to execute in this folder
 	    		
-		FileOutputStream localCSVFile = new FileOutputStream(localFilePath + "/" + processingId + ".csv");
+		FileOutputStream localFile = new FileOutputStream(localFilePath + "/" + fileName);
 		final int BUF_SIZE = 1 << 8;
 		byte[] buffer = new byte[BUF_SIZE];
 		int bytesRead = -1;
-		while((bytesRead = inputCSVFile.read(buffer)) > -1) {
-			localCSVFile.write(buffer, 0, bytesRead);
+		while((bytesRead = inputFile.read(buffer)) > -1) {
+			localFile.write(buffer, 0, bytesRead);
 		}
 		
-		inputCSVFile.close();
-		localCSVFile.close();
+		inputFile.close();
+		localFile.close();
 		
 		return localFileURL;
 	}
