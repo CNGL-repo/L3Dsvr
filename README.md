@@ -8,7 +8,7 @@ Core of L3Data server in the FALCON project (http://falcon-project.eu/).
 ### addFile
 Receives the URL of a CSV or CSVM file and copies it into the relevant folder in the L3Dsvr server
 Method: POST addFile
-Input: sourceURL, custId, projId, sourceLang, targetLang
+Input: sourceURL, custId, projId
 Response: outputURL
 
 
@@ -18,15 +18,15 @@ Response: outputURL
 3. Update the username, replacing "calvodea" by the correct one
 4. Run As -> Run on Server. Choose server Tomcat v8.0
 5. From a terminal session, type the following example
-   curl -X POST --data "sourceURL=https://docs.shopify.com/manual/your-store/products/product_template.csv&custId=1234&projId=5678&sourceLang=es&targetLang=en" http://localhost:8080/L3Dsvr/api/addFile
-6. It will return something like {"outputURL": "/home/calvodea/workspace/L3Dsvr/files/1234/5678/es/en/product_template.csv"}
-7. If you open /home/calvodea/workspace/L3Dsvr/files/1234/5678/es/en/product_template.csv you will see the file
+   curl -X POST --data "sourceURL=https://docs.shopify.com/manual/your-store/products/product_template.csv&custId=1234&projId=5678" http://localhost:8080/L3Dsvr/api/addFile
+6. It will return something like {"outputURL": "/home/calvodea/workspace/L3Dsvr/data/1234/5678/product_template.csv"}
+7. If you open /home/calvodea/workspace/L3Dsvr/data/1234/5678/product_template.csv you will see the file
 
 ## How to run in production
 1. From a terminal session, type the following example
-   curl -X POST --data "sourceURL=https://docs.shopify.com/manual/your-store/products/product_template.csv&custId=1234&projId=5678&sourceLang=es&targetLang=en" http://l3dsvr.peep.ie/api/addFile
-2. It will return something like {"outputURL": "http://l3dsvr.peep.ie/files/1234/5678/es/en/product_template.csv"}
-3. If you open http://l3dsvr.peep.ie/files/1234/5678/es/en/product_template.csv you will see the file
+   curl -X POST --data "sourceURL=https://docs.shopify.com/manual/your-store/products/product_template.csv&custId=1234&projId=5678" http://l3dsvr.peep.ie/api/addFile
+2. It will return something like {"outputURL": "http://l3dsvr.peep.ie/data/1234/5678/product_template.csv"}
+3. If you open http://l3dsvr.peep.ie/data/1234/5678/product_template.csv you will see the file
 
 ## How to deploy to a production server
 1. Install Tomcat 8 in the production server (path /opt/tomcat8)

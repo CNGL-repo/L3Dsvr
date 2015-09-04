@@ -24,21 +24,19 @@ public class L3DsvrServices {
 	
 /* Comment or discomment the lines below depending on the environment, and update the username ("calvodea") */
 	String basePath = "/var/www/webservices/l3dsvr/"; // [PRODUCTION] Path to server 
-	String resultsBaseURL = "http://l3dsvr.peep.ie/files/"; // [PRODUCTION] URL to files
+	String resultsBaseURL = "http://l3dsvr.peep.ie/data/"; // [PRODUCTION] URL to files
 //	String basePath = "/home/calvodea/workspace/L3Dsvr/"; // [DEVELOPMENT] Path to server 
-//	String resultsBaseURL = basePath + "files/"; // [DEVELOPMENT] URL to files
+//	String resultsBaseURL = basePath + "data/"; // [DEVELOPMENT] URL to files
 	
 	@POST
 	@Path("/addFile")
 	@Produces(MediaType.APPLICATION_JSON)
 	/* Receives the URL of a file, the customerId, projectId, source language and target language
-	 * and copies it into the folder files/customerId/projectId/sourceLanguage/targetLanguage/ in the L3Dsvr server */
+	 * and copies it into the folder data/customerId/projectId/ in the L3Dsvr server */
 	public Response addFileService(
 			@FormParam("sourceURL") String sourceFileURL, // e.g. "https://docs.shopify.com/manual/your-store/products/product_template.csv"
 			@FormParam("custId") String customerId, // e.g. "1234"
-			@FormParam("projId") String projectId, // e.g. "5678"
-			@FormParam("sourceLang") String sourceLanguage, // e.g. "pl"
-			@FormParam("targetLang") String targetLanguage) // e.g. "en"
+			@FormParam("projId") String projectId) // e.g. "5678"
 					throws IOException, InterruptedException, DOMException, SAXException { 
 		
 		// If URL is not accessible, return error
@@ -53,7 +51,7 @@ public class L3DsvrServices {
 			return Response.ok(wrongFormatFileResponse, MediaType.APPLICATION_JSON).build();
 		}
 		
-		String localFilePath = copyFileToLocalhost(sourceFileURL, customerId, projectId, sourceLanguage, targetLanguage);
+		String localFilePath = copyFileToLocalhost(sourceFileURL, customerId, projectId);
 				
 		String jsonResponse = "{\"outputURL\": \"" + localFilePath + "\"}";
 		
@@ -91,19 +89,17 @@ public class L3DsvrServices {
 	}
 	
 	
-	/* Make an exact copy of [remoteFile] in files/customerId/projectId/sourceLanguage/targetLanguage/[remoteFile]
+	/* Make an exact copy of [remoteFile] in data/customerId/projectId/sourceLanguage/targetLanguage/[remoteFile]
 	 * in the L3Dsvr server, returning the path */
-	private String copyFileToLocalhost(String remoteFileURL, String customerId, String projectId,
-			String sourceLanguage, String targetLanguage) throws IOException {
+	private String copyFileToLocalhost(String remoteFileURL, String customerId, String projectId) 
+			throws IOException {
 
 		URL inputURL = new URL(remoteFileURL);
 		String fileName = FilenameUtils.getName(remoteFileURL);
 
-		String localFilePath = basePath + "files/" + customerId + "/" + projectId + "/" +
-				sourceLanguage + "/" + targetLanguage;
+		String localFilePath = basePath + "data/" + customerId + "/" + projectId;
 		
-		String localFileURL = resultsBaseURL + customerId + "/" + projectId + "/" +
-				sourceLanguage + "/" + targetLanguage + "/" + fileName;
+		String localFileURL = resultsBaseURL + customerId + "/" + projectId + "/" + fileName;
 		
 		InputStream inputFile = inputURL.openStream();
 		
